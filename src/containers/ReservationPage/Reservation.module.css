@@ -1,0 +1,19 @@
+.imageGallery{
+    /* width: 20rem;
+    height: 50px; */
+    object-fit: contain;
+}
+
+.reservationFooter{
+    height: 100px;
+    width: 100%;
+    background-color: red;
+}
+
+.reservationPanel{
+    height: 100%;
+}
+
+.reservationButtonActionsMobile {
+    height: 3rem;
+}
