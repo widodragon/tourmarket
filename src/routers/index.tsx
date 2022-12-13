@@ -187,11 +187,10 @@ const Routes = () => {
   }, []);
 
   React.useEffect(() => {
-    if (window !== undefined) {
-      console.log(window +  window.location.href.split("/")[3])
-      // if (window.location.href.split("/")[3] === "receipt") {
-      //   setReceipt(true);
-      // }
+    if (typeof window !== "undefined") {
+      if (window.location.href.split("/")[3] === "receipt") {
+        setReceipt(true);
+      }
     }
   }, []);
 
@@ -223,8 +222,8 @@ const Routes = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter basename="/">
-          {/* {!isReceipt && <ScrollToTop />}
-          {!isReceipt && <SiteHeader />} */}
+          {!isReceipt && <ScrollToTop />}
+          {!isReceipt && <SiteHeader />}
 
           <Switch>
             {pages.map(({ component, path, exact }) => {
@@ -279,8 +278,8 @@ const Routes = () => {
             <Route component={Page404} />
           </Switch>
 
-          {/* {WIN_WIDTH < 768 && !isReceipt && <FooterNav />} */}
-          {/* {!isReceipt && <Footer />} */}
+          {WIN_WIDTH < 768 && !isReceipt && <FooterNav />}
+          {!isReceipt && <Footer />}
         </BrowserRouter>
       </PersistGate>
     </Provider>
