@@ -18,19 +18,19 @@ export interface ReceiptPageProps {
 const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
     const [receiptData, setReceiptData] = useState<any>(null);
     const [id, setId] = useState<any>(null);
-    useEffect(() => {
-        if (id) {
-            getInformationReceipt();
-        }
-    }, [id]);
+    // useEffect(() => {
+    //     if (id) {
+    //         getInformationReceipt();
+    //     }
+    // }, [id]);
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-          if (window.location.href.split("/")[3] === "receipt") {
-            setId(window.location.href.split("receipt/")[1])
-          }
-        }
-      }, []);
+    // useEffect(() => {
+    //     if (typeof window !== "undefined") {
+    //       if (window.location.href.split("/")[3] === "receipt") {
+    //         setId(window.location.href.split("receipt/")[1])
+    //       }
+    //     }
+    //   }, []);
 
     const getInformationReceipt = async () => {
         let query = id;
