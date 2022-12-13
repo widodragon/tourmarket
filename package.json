@@ -2,7 +2,7 @@
   "name": "chisfis",
   "version": "1.4.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://main--merry-sprite-47c974.netlify.app/",
   "dependencies": {
     "@glidejs/glide": "^3.4.1",
     "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
