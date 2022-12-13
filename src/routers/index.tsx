@@ -279,8 +279,8 @@ const Routes = () => {
             <Route component={Page404} />
           </Switch>
 
-          {WIN_WIDTH < 768 && !isReceipt && <FooterNav />}
-          {!isReceipt && <Footer />}
+          {/* {WIN_WIDTH < 768 && !isReceipt && <FooterNav />} */}
+          {/* {!isReceipt && <Footer />} */}
         </BrowserRouter>
       </PersistGate>
     </Provider>
