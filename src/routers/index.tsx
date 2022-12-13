@@ -187,7 +187,7 @@ const Routes = () => {
   }, []);
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (window !== undefined) {
       console.log(window +  window.location.href.split("/")[3])
       // if (window.location.href.split("/")[3] === "receipt") {
       //   setReceipt(true);
