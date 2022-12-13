@@ -223,8 +223,8 @@ const Routes = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter basename="/">
-          {!isReceipt && <ScrollToTop />}
-          {!isReceipt && <SiteHeader />}
+          {/* {!isReceipt && <ScrollToTop />}
+          {!isReceipt && <SiteHeader />} */}
 
           <Switch>
             {pages.map(({ component, path, exact }) => {
