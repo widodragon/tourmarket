@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/id';
@@ -18,12 +17,20 @@ export interface ReceiptPageProps {
 
 const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
     const [receiptData, setReceiptData] = useState<any>(null);
-    let { id }: any = useParams();
+    const [id, setId] = useState<any>(null);
     useEffect(() => {
         if (id) {
             getInformationReceipt();
         }
     }, [id]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+          if (window.location.href.split("/")[3] === "receipt") {
+            setId(window.location.href.split("receipt/")[1])
+          }
+        }
+      }, []);
 
     const getInformationReceipt = async () => {
         let query = id;
