@@ -42,7 +42,9 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
             <div className="flex flex-col">
                 <div className="w-full flex flex-col sm:rounded-2xl sm:border border-neutral-200 dark:border-neutral-700 space-y-8 px-0 sm:p-6 xl:p-8">
                     <h2 className="text-3xl lg:text-4xl font-semibold">
-                        Pesanan Anda Berhasil 🎉
+                        {
+                            receiptData?.header?.paymentCategory === "NOT SELECTED" ? "Pesanan Anda Belum Dibayar" : "Pesanan Anda Berhasil 🎉"
+                        }
                     </h2>
 
                     <div className="border-b border-neutral-200 dark:border-neutral-700"></div>
@@ -182,14 +184,14 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
                     ))}
                     {/* Detail Pengunjung */}
                 </div>
-                <button
+                {/* <button
                     type="button"
                     onClick={() => {
                     }}
                     className="text-gray-900 w-full bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mt-11 md:mt-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                 >
                     Kembali ke beranda
-                </button>
+                </button> */}
             </div>
         );
     };
