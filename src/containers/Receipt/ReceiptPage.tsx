@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -11,6 +11,7 @@ import { getTitleWebsite } from 'utils/localStorage';
 import { Helmet } from 'react-helmet';
 import * as transactionActions from 'redux/actions/transaction';
 import { GET_RECEIPT } from 'utils/apiHelper';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export interface ReceiptPageProps {
     className?: string;
@@ -18,7 +19,10 @@ export interface ReceiptPageProps {
 
 const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
     const [receiptData, setReceiptData] = useState<any>(null);
+    const [visibleCaptcha, setVisibleCaptcha] = useState<boolean>(false);
+
     let { id }: any = useParams();
+    const captchaRef = useRef<any>(null)
     useEffect(() => {
         if (id) {
             getInformationReceipt();
@@ -30,13 +34,31 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
         try {
             let receipt = await GET_RECEIPT("/public/biller-booking/invoice/" + query);
             if (receipt) {
-                setReceiptData(receipt?.result);
+                setReceiptData(receipt?.result?.result);
             }
         } catch (error) {
             console.log(error);
         }
     }
 
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        if (!visibleCaptcha) {
+            setVisibleCaptcha(true);
+        } else {
+            const token = captchaRef.current.getValue();
+            const response = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : ""}&response=${token}`, {
+                method: 'GET'
+            });
+            console.log(response)
+            captchaRef.current.reset();
+        }
+    }
+
+    let totalTicket = 0;
+    receiptData?.reportingDetail?.map((item: any) => {
+        totalTicket += item?.productQty
+    })
     const renderContent = () => {
         return (
             <div className="flex flex-col">
@@ -97,10 +119,10 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
 
                                 <div className="flex flex-col">
                                     <span className="text-sm text-neutral-400">
-                                        Jumlah Pengunjung
+                                        Jumlah Tiket
                                     </span>
                                     <span className="mt-1.5 text-lg font-semibold">
-                                        {receiptData?.ticketData?.length} Orang
+                                        {totalTicket} Tiket
                                     </span>
                                 </div>
                             </div>
@@ -125,7 +147,7 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
                                     {receiptData?.header?.bookingRef}
                                 </span>
                             </div>
-                            <div className="flex text-neutral-6000 dark:text-neutral-300">
+                            {/* <div className="flex text-neutral-6000 dark:text-neutral-300">
                                 <span className="flex-1">Total Pembayaran</span>
                                 <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
                                     Rp{' '}
@@ -133,7 +155,7 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
                                         receiptData?.header?.paymentTotal
                                     )}
                                 </span>
-                            </div>
+                            </div> */}
                             <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
                                 <span className="flex-1">Metode Pembayaran</span>
                                 <span className="flex-1 font-medium text-neutral-900 dark:text-neutral-100">
@@ -163,35 +185,25 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
                             </span>
                         </div>
                     </div>
-                    <h3 className="text-2xl font-semibold">Detail Pengunjung</h3>
-                    <div className="border-b border-neutral-200 dark:border-neutral-700"></div>
-                    {/* Detail Pengunjung */}
-                    {receiptData?.ticketData?.map((item: any, index: number) => (
-                        <div key={index}>
-                            <div className="flex flex-row items-center justify-between flex-1 space-y-0">
-                                <div>
-                                    <h6 className="text-sm text-gray-400">Nama</h6>
-                                    <h6 className="text-lg text-neutral-900 dark:text-neutral-100">
-                                        {item?.visitorName}
-                                    </h6>
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <h6 className="text-sm mb-2">Scan QR</h6>
-                                    <QRCodeSVG value={item?.qrCode} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
                     {/* Detail Pengunjung */}
                 </div>
-                {/* <button
-                    type="button"
-                    onClick={() => {
-                    }}
-                    className="text-gray-900 w-full bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mt-11 md:mt-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                >
-                    Kembali ke beranda
-                </button> */}
+                <form onSubmit={handleSubmit}>
+                    <div className="flex flex-col justify-center items-center mt-2">
+                        {
+                            visibleCaptcha ?
+                                <ReCAPTCHA
+                                    ref={captchaRef}
+                                    sitekey={process.env.REACT_APP_SITE_KEY ? process.env.REACT_APP_SITE_KEY : ""}
+                                /> : null
+                        }
+                        <button
+                            type="submit"
+                            className="text-gray-900 w-full bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mt-11 md:mt-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                        >
+                            Kirim Ulang Invoice
+                        </button>
+                    </div>
+                </form>
             </div>
         );
     };
