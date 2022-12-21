@@ -48,7 +48,8 @@ const ReceiptPage: FC<ReceiptPageProps> = ({ className = '' }) => {
         } else {
             const token = captchaRef.current.getValue();
             const response = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : ""}&response=${token}`, {
-                method: 'GET'
+                method: 'GET',
+                mode: "no-cors"
             });
             console.log(response)
             captchaRef.current.reset();
